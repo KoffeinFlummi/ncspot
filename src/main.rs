@@ -28,6 +28,13 @@ extern crate fern;
 
 extern crate rand;
 
+#[cfg(target_os = "macos")]
+#[macro_use]
+extern crate objc;
+
+#[cfg(target_os = "macos")]
+extern crate cocoa;
+
 use std::fs;
 use std::process;
 use std::sync::Arc;
@@ -55,6 +62,9 @@ mod ui;
 
 #[cfg(feature = "mpris")]
 mod mpris;
+
+#[cfg(target_os = "macos")]
+mod macos;
 
 use commands::CommandManager;
 use events::{Event, EventManager};
@@ -241,6 +251,13 @@ fn main() {
                     #[cfg(feature = "mpris")]
                     mpris_manager.update();
                 }
+            }
+        }
+
+        #[cfg(target_os = "macos")]
+        {
+            if let Some(cmd) = macos::poll_macos_events() {
+                cmd_manager.handle(&mut cursive, cmd);
             }
         }
     }

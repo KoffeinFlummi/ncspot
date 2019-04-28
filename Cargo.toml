@@ -50,6 +50,10 @@ default-features = false
 [dependencies.winapi]
 git = "https://github.com/overdrivenpotato/winapi-rs"
 
+[target.'cfg(target_os = "macos")'.dependencies]
+objc = "0.2.6"
+cocoa = "0.18.4"
+
 [features]
 pulseaudio_backend = ["librespot/pulseaudio-backend"]
 rodio_backend = ["librespot/rodio-backend"]
